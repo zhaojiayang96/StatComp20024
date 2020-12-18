@@ -1,0 +1,137 @@
+---
+title: "My-Vignette"
+author: "Jiayang Zhao"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{My-Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Project one: kernel Density Estimation (KDE)
+
+We are going to estimate the density of simulated one-dim data using classical Density Estimation (DE) methods and proposed method.
+
+## Basic KDE methods
+
+```{r}
+# data preparation
+set.seed(111)
+n <- 200
+Num.Cmp <- 8
+pro <- rep(1/8, Num.Cmp)
+multi <- sample(1:Num.Cmp, n, replace = T, prob=pro)
+mu <- 3 * ((2/3)^(1:Num.Cmp) - 1)
+sigma <- (2/3)^(1:Num.Cmp)
+x <- NULL
+for (ii in 1:Num.Cmp) {
+  com_txt <- paste("com", ii, " <- rnorm(length(which(multi==", ii, ")), mean=", mu[ii], ", sd=", sigma[ii], ")",sep="")
+  eval(parse(text=com_txt))
+  com_txt <- paste("x <- c(x, com", ii, ")", sep="")
+  eval(parse(text=com_txt))
+}
+# true density function, y is h, and z is v.
+y <- seq(-3, 1, 0.01)
+z <- rep(0, length(y))
+for (ii in 1:Num.Cmp) {
+  z <- z + pro[ii] * dnorm(y, mean=mu[ii], sd=sigma[ii])
+}
+```
+
+## Rodeo algorithm
+
+```{r}
+# Rodeo local for 1-dim
+rodeo.local.bw1 <- function(xx, x, h.init=1.3/log(log(n)), beta=0.9, cn=log(n)/n){
+  # bandwidth selection
+  # para: xx        target point at which we want to estimate f(x)
+  # para: x         samples
+  # para: beta      learning rate
+  # value: h.init   bandwidth
+  h1 <- h.init
+  while(TRUE){
+    Z.i <- ((xx - x)^2 - h1^2) * exp(- (xx - x)^2 / h1^2 / 2) / h1^4 / sqrt(2*pi)
+    Z <- mean(Z.i) 
+    s <- var(Z.i)
+    lam <- sqrt(2*s*log(n*cn)) / 10
+    if (abs(Z) > lam) {
+      h1 <- h1 * beta
+    } else {
+      return(h1)
+    }
+  }
+}
+rodeo.local1 <- function(t, x){
+  # estimate target points t
+  # para: t   target points, a vector
+  # para: x   data points, a vector
+  h <- unlist(base::lapply(X=t, FUN=rodeo.local.bw1, x=x))
+  K <- stats::dnorm
+  f.hat <- unlist(base::lapply(X=1:length(t), FUN=function(ii) mean(K((t[ii] - x) / h[ii]))/ h[ii]))
+  return(f.hat)
+}
+# plot h and density
+t <- seq(-3, 1, 0.05)
+h <- unlist(base::lapply(X=t, FUN=rodeo.local.bw1, x=x))
+plot(t, h, "l", main="Bandwidth of Rodeo", xlab="x", ylab="h")
+fit.rodeo <- rodeo.local1(t=t, x=x)
+plot(t, fit.rodeo, "l", lty=2, ylim=c(0,2.5), xlim=c(-3, 1), main="Rodeo", xlab="x", ylab="Density")
+lines(y, z, lty=1, lwd=2)
+legend("topright", legend=c("True Density", "Rodeo"), col=1, lty=c(1, 2), lwd=c(2, 1))
+```
+
+# Project two: Boundary correction methods in kernel Density Estimation (KDE)
+
+Nonparametric kernel density estimation plays an important role in the statistical analysis of data. However, it has difficulties when estimating a density at and near the finite end points of the support of the density to be estimated, This is due to boundary effects that occur in nonparametric curve estimation problems. Thus, we need to apply Boundary correction methods in kDE.
+
+Suppose we want to estimate a probability density $f$ nonparametrically based on a random sample $X = (X_1, X_2, ..., X_n)$, For the ease of presentation we are restricted in the following notation to univariate models, and we study density estimation where the support of an unknown density is bounded from one side. Without loss of generality, we take this bound to be a lower bound and equal to zero. Let $f$ denote an unknown probability density function with support, $[0, \infty)$, then the traditional kernel estimator is defined as
+\begin{align}\hat{f}_h(x)=\frac{1}{nh}\sum^{n}_{i = 1}{K(\frac{x-X_i}{h})}\end{align}
+where $K$ is some chosen unimodal kernel function, symmetric about zero, and $h$ is the bandwidth $(h\rightarrow0 \ as \ n\rightarrow\infty)$. The basic properties of $\hat{f}_h(x)$ at interior points, $x \ge h$,  are well-known. But the performance of $\hat{f}_h(x)$ at boundary points, i.e., for $x \in [0, h)$ suffer from boundary effects. More specifically, The kernel estimator$\hat{f}_h(x)$ is not consistent at the boundary, i.e. $E(\hat{f}_h(0)) \rightarrow \frac{f(0)}{2}$, and the bias of $\hat{f}_h(x)$ is of order $O(h)$ rather than $O(h^2)$ at boundary points. 
+To clearly illustrate the boundary effects of $\hat{f}_h(x)$, we consider an example of an exponentially distributed simulation data (sample size is 1000). As is shown in the next figure, the density function that should be monotonically decreasing has a distinct "steep slope" around 0, and regions that should not have a density less than zero also have positive estimates.
+
+```{r}
+# Required packages
+library(kedd)
+
+# Traditional density estimation method without using boundary correction techniques
+set.seed(123)
+dat <- rexp(1000, 1)
+plot(density(dat, kernel = "epanechnikov"), ylim = c(0, 1.2), main = "", xlab = "x")
+lines(seq(0, 8, by = 0.02), dexp(seq(0, 8, by = 0.02), 1), col = "blue")
+abline(v = 0, col = "black", lty = 2)
+legend("topright", c("true density", "estimated density"), lty = c(1,1), col = c("blue","black"))
+```
+
+We next apply Generalized Jackknifing method to boundary correction problem.
+
+```{r}
+# Generlized Jacknifing method
+kernel.new <- function(x, u, h) {
+  # Compute a0, a1, a2
+  lb <- -1
+  ub <- pmin(u / h, 1)
+  a0 <- 0.75 * (ub - lb) - 0.25 * (ub^3 - lb^3)
+  a1 <- 3 / 8 * (ub^2 - lb^2) - 3 / 16 * (ub^4 - lb^4)
+  a2 <- 0.25 * (ub^3 - lb^3) - 0.15 * (ub^5 - lb^5)
+  ((3/4)*(1-x^2)*(abs(x) <= 1)) * (a2 - a1*x) / (a0*a2 - a1^2)
+}
+den.est <- function(u, ui, h) {
+sapply(u, function(u) ifelse(u < 0, 0, mean(kernel.new((u - ui) / h, u, h)) / h))
+}
+# Estimated value at boundary 0
+x <- seq(0, 8, by = 0.02)
+y <- den.est(x, dat, 2 * bw.bcv(dat))
+y0 <- den.est(0, dat, 2 * bw.bcv(dat))
+y0_True <- dexp(0,1)
+cat("The estimated value at boundary 0 by using GJack is ", y0, "\nThe true value at boundary 0 is ", y0_True)
+
+# Plot
+plot(x, y, type = "l", ylim = c(0, 1.2), ylab = "Density")
+lines(x, dexp(x, 1), col = "blue")
+abline(v = 0, col = "black", lty = 2)
+legend("topright", c("true density", "estimated density"), lty = c(1,1), col = c("blue","black"))
+```
