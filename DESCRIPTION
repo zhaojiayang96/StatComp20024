@@ -2,7 +2,7 @@ Package: StatComp20024
 Type: Package
 Title: Statistics Computation Final Project
 Version: 1.0
-Date: 2020-12-17
+Date: 2020-12-19
 Author: Jiayang Zhao
 Maintainer: Jiayang Zhao <Zhaojy19@mail.ustc.edu.cn>
 Description: This is a R package for Statistics Computation Course in fall 2020.
