@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Jiayang Zhao" />
+
+
+<title>My-Vignette</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">My-Vignette</h1>
+<h4 class="author">Jiayang Zhao</h4>
+
+
+
+<div id="project-one-kernel-density-estimation-kde" class="section level1">
+<h1>Project one: kernel Density Estimation (KDE)</h1>
+<p>We are going to estimate the density of simulated one-dim data using classical Density Estimation (DE) methods and proposed method.</p>
+<div id="basic-kde-methods" class="section level2">
+<h2>Basic KDE methods</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># data preparation</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">set.seed</span>(<span class="dv">111</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>n &lt;-<span class="st"> </span><span class="dv">200</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>Num.Cmp &lt;-<span class="st"> </span><span class="dv">8</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>pro &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">8</span>, Num.Cmp)</span>
+<span id="cb1-6"><a href="#cb1-6"></a>multi &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span>Num.Cmp, n, <span class="dt">replace =</span> T, <span class="dt">prob=</span>pro)</span>
+<span id="cb1-7"><a href="#cb1-7"></a>mu &lt;-<span class="st"> </span><span class="dv">3</span> <span class="op">*</span><span class="st"> </span>((<span class="dv">2</span><span class="op">/</span><span class="dv">3</span>)<span class="op">^</span>(<span class="dv">1</span><span class="op">:</span>Num.Cmp) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb1-8"><a href="#cb1-8"></a>sigma &lt;-<span class="st"> </span>(<span class="dv">2</span><span class="op">/</span><span class="dv">3</span>)<span class="op">^</span>(<span class="dv">1</span><span class="op">:</span>Num.Cmp)</span>
+<span id="cb1-9"><a href="#cb1-9"></a>x &lt;-<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="cf">for</span> (ii <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Num.Cmp) {</span>
+<span id="cb1-11"><a href="#cb1-11"></a>  com_txt &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;com&quot;</span>, ii, <span class="st">&quot; &lt;- rnorm(length(which(multi==&quot;</span>, ii, <span class="st">&quot;)), mean=&quot;</span>, mu[ii], <span class="st">&quot;, sd=&quot;</span>, sigma[ii], <span class="st">&quot;)&quot;</span>,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb1-12"><a href="#cb1-12"></a>  <span class="kw">eval</span>(<span class="kw">parse</span>(<span class="dt">text=</span>com_txt))</span>
+<span id="cb1-13"><a href="#cb1-13"></a>  com_txt &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;x &lt;- c(x, com&quot;</span>, ii, <span class="st">&quot;)&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb1-14"><a href="#cb1-14"></a>  <span class="kw">eval</span>(<span class="kw">parse</span>(<span class="dt">text=</span>com_txt))</span>
+<span id="cb1-15"><a href="#cb1-15"></a>}</span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="co"># true density function, y is h, and z is v.</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a>y &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">3</span>, <span class="dv">1</span>, <span class="fl">0.01</span>)</span>
+<span id="cb1-18"><a href="#cb1-18"></a>z &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">length</span>(y))</span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="cf">for</span> (ii <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Num.Cmp) {</span>
+<span id="cb1-20"><a href="#cb1-20"></a>  z &lt;-<span class="st"> </span>z <span class="op">+</span><span class="st"> </span>pro[ii] <span class="op">*</span><span class="st"> </span><span class="kw">dnorm</span>(y, <span class="dt">mean=</span>mu[ii], <span class="dt">sd=</span>sigma[ii])</span>
+<span id="cb1-21"><a href="#cb1-21"></a>}</span></code></pre></div>
+</div>
+<div id="rodeo-algorithm" class="section level2">
+<h2>Rodeo algorithm</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Rodeo local for 1-dim</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>rodeo.local.bw1 &lt;-<span class="st"> </span><span class="cf">function</span>(xx, x, <span class="dt">h.init=</span><span class="fl">1.3</span><span class="op">/</span><span class="kw">log</span>(<span class="kw">log</span>(n)), <span class="dt">beta=</span><span class="fl">0.9</span>, <span class="dt">cn=</span><span class="kw">log</span>(n)<span class="op">/</span>n){</span>
+<span id="cb2-3"><a href="#cb2-3"></a>  <span class="co"># bandwidth selection</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>  <span class="co"># para: xx        target point at which we want to estimate f(x)</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>  <span class="co"># para: x         samples</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>  <span class="co"># para: beta      learning rate</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>  <span class="co"># value: h.init   bandwidth</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a>  h1 &lt;-<span class="st"> </span>h.init</span>
+<span id="cb2-9"><a href="#cb2-9"></a>  <span class="cf">while</span>(<span class="ot">TRUE</span>){</span>
+<span id="cb2-10"><a href="#cb2-10"></a>    Z.i &lt;-<span class="st"> </span>((xx <span class="op">-</span><span class="st"> </span>x)<span class="op">^</span><span class="dv">2</span> <span class="op">-</span><span class="st"> </span>h1<span class="op">^</span><span class="dv">2</span>) <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span><span class="st"> </span>(xx <span class="op">-</span><span class="st"> </span>x)<span class="op">^</span><span class="dv">2</span> <span class="op">/</span><span class="st"> </span>h1<span class="op">^</span><span class="dv">2</span> <span class="op">/</span><span class="st"> </span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span>h1<span class="op">^</span><span class="dv">4</span> <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">2</span><span class="op">*</span>pi)</span>
+<span id="cb2-11"><a href="#cb2-11"></a>    Z &lt;-<span class="st"> </span><span class="kw">mean</span>(Z.i) </span>
+<span id="cb2-12"><a href="#cb2-12"></a>    s &lt;-<span class="st"> </span><span class="kw">var</span>(Z.i)</span>
+<span id="cb2-13"><a href="#cb2-13"></a>    lam &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">2</span><span class="op">*</span>s<span class="op">*</span><span class="kw">log</span>(n<span class="op">*</span>cn)) <span class="op">/</span><span class="st"> </span><span class="dv">10</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a>    <span class="cf">if</span> (<span class="kw">abs</span>(Z) <span class="op">&gt;</span><span class="st"> </span>lam) {</span>
+<span id="cb2-15"><a href="#cb2-15"></a>      h1 &lt;-<span class="st"> </span>h1 <span class="op">*</span><span class="st"> </span>beta</span>
+<span id="cb2-16"><a href="#cb2-16"></a>    } <span class="cf">else</span> {</span>
+<span id="cb2-17"><a href="#cb2-17"></a>      <span class="kw">return</span>(h1)</span>
+<span id="cb2-18"><a href="#cb2-18"></a>    }</span>
+<span id="cb2-19"><a href="#cb2-19"></a>  }</span>
+<span id="cb2-20"><a href="#cb2-20"></a>}</span>
+<span id="cb2-21"><a href="#cb2-21"></a>rodeo.local1 &lt;-<span class="st"> </span><span class="cf">function</span>(t, x){</span>
+<span id="cb2-22"><a href="#cb2-22"></a>  <span class="co"># estimate target points t</span></span>
+<span id="cb2-23"><a href="#cb2-23"></a>  <span class="co"># para: t   target points, a vector</span></span>
+<span id="cb2-24"><a href="#cb2-24"></a>  <span class="co"># para: x   data points, a vector</span></span>
+<span id="cb2-25"><a href="#cb2-25"></a>  h &lt;-<span class="st"> </span><span class="kw">unlist</span>(base<span class="op">::</span><span class="kw">lapply</span>(<span class="dt">X=</span>t, <span class="dt">FUN=</span>rodeo.local.bw1, <span class="dt">x=</span>x))</span>
+<span id="cb2-26"><a href="#cb2-26"></a>  K &lt;-<span class="st"> </span>stats<span class="op">::</span>dnorm</span>
+<span id="cb2-27"><a href="#cb2-27"></a>  f.hat &lt;-<span class="st"> </span><span class="kw">unlist</span>(base<span class="op">::</span><span class="kw">lapply</span>(<span class="dt">X=</span><span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(t), <span class="dt">FUN=</span><span class="cf">function</span>(ii) <span class="kw">mean</span>(<span class="kw">K</span>((t[ii] <span class="op">-</span><span class="st"> </span>x) <span class="op">/</span><span class="st"> </span>h[ii]))<span class="op">/</span><span class="st"> </span>h[ii]))</span>
+<span id="cb2-28"><a href="#cb2-28"></a>  <span class="kw">return</span>(f.hat)</span>
+<span id="cb2-29"><a href="#cb2-29"></a>}</span>
+<span id="cb2-30"><a href="#cb2-30"></a><span class="co"># plot h and density</span></span>
+<span id="cb2-31"><a href="#cb2-31"></a>t &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">3</span>, <span class="dv">1</span>, <span class="fl">0.05</span>)</span>
+<span id="cb2-32"><a href="#cb2-32"></a>h &lt;-<span class="st"> </span><span class="kw">unlist</span>(base<span class="op">::</span><span class="kw">lapply</span>(<span class="dt">X=</span>t, <span class="dt">FUN=</span>rodeo.local.bw1, <span class="dt">x=</span>x))</span>
+<span id="cb2-33"><a href="#cb2-33"></a><span class="kw">plot</span>(t, h, <span class="st">&quot;l&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Bandwidth of Rodeo&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;x&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;h&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>fit.rodeo &lt;-<span class="st"> </span><span class="kw">rodeo.local1</span>(<span class="dt">t=</span>t, <span class="dt">x=</span>x)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">plot</span>(t, fit.rodeo, <span class="st">&quot;l&quot;</span>, <span class="dt">lty=</span><span class="dv">2</span>, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">2.5</span>), <span class="dt">xlim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">3</span>, <span class="dv">1</span>), <span class="dt">main=</span><span class="st">&quot;Rodeo&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;x&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Density&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="kw">lines</span>(y, z, <span class="dt">lty=</span><span class="dv">1</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="kw">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;True Density&quot;</span>, <span class="st">&quot;Rodeo&quot;</span>), <span class="dt">col=</span><span class="dv">1</span>, <span class="dt">lty=</span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">lwd=</span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+</div>
+<div id="project-two-boundary-correction-methods-in-kernel-density-estimation-kde" class="section level1">
+<h1>Project two: Boundary correction methods in kernel Density Estimation (KDE)</h1>
+<p>Nonparametric kernel density estimation plays an important role in the statistical analysis of data. However, it has difficulties when estimating a density at and near the finite end points of the support of the density to be estimated, This is due to boundary effects that occur in nonparametric curve estimation problems. Thus, we need to apply Boundary correction methods in kDE.</p>
+<p>Suppose we want to estimate a probability density <span class="math inline">\(f\)</span> nonparametrically based on a random sample <span class="math inline">\(X = (X_1, X_2, ..., X_n)\)</span>, For the ease of presentation we are restricted in the following notation to univariate models, and we study density estimation where the support of an unknown density is bounded from one side. Without loss of generality, we take this bound to be a lower bound and equal to zero. Let <span class="math inline">\(f\)</span> denote an unknown probability density function with support, <span class="math inline">\([0, \infty)\)</span>, then the traditional kernel estimator is defined as <span class="math display">\[\begin{align}\hat{f}_h(x)=\frac{1}{nh}\sum^{n}_{i = 1}{K(\frac{x-X_i}{h})}\end{align}\]</span> where <span class="math inline">\(K\)</span> is some chosen unimodal kernel function, symmetric about zero, and <span class="math inline">\(h\)</span> is the bandwidth <span class="math inline">\((h\rightarrow0 \ as \ n\rightarrow\infty)\)</span>. The basic properties of <span class="math inline">\(\hat{f}_h(x)\)</span> at interior points, <span class="math inline">\(x \ge h\)</span>, are well-known. But the performance of <span class="math inline">\(\hat{f}_h(x)\)</span> at boundary points, i.e., for <span class="math inline">\(x \in [0, h)\)</span> suffer from boundary effects. More specifically, The kernel estimator<span class="math inline">\(\hat{f}_h(x)\)</span> is not consistent at the boundary, i.e. <span class="math inline">\(E(\hat{f}_h(0)) \rightarrow \frac{f(0)}{2}\)</span>, and the bias of <span class="math inline">\(\hat{f}_h(x)\)</span> is of order <span class="math inline">\(O(h)\)</span> rather than <span class="math inline">\(O(h^2)\)</span> at boundary points. To clearly illustrate the boundary effects of <span class="math inline">\(\hat{f}_h(x)\)</span>, we consider an example of an exponentially distributed simulation data (sample size is 1000). As is shown in the next figure, the density function that should be monotonically decreasing has a distinct “steep slope” around 0, and regions that should not have a density less than zero also have positive estimates.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Required packages</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">library</span>(kedd)</span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co"># Traditional density estimation method without using boundary correction techniques</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb4-6"><a href="#cb4-6"></a>dat &lt;-<span class="st"> </span><span class="kw">rexp</span>(<span class="dv">1000</span>, <span class="dv">1</span>)</span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="kw">plot</span>(<span class="kw">density</span>(dat, <span class="dt">kernel =</span> <span class="st">&quot;epanechnikov&quot;</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">1.2</span>), <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;x&quot;</span>)</span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="kw">lines</span>(<span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">8</span>, <span class="dt">by =</span> <span class="fl">0.02</span>), <span class="kw">dexp</span>(<span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">8</span>, <span class="dt">by =</span> <span class="fl">0.02</span>), <span class="dv">1</span>), <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="kw">abline</span>(<span class="dt">v =</span> <span class="dv">0</span>, <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="kw">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;true density&quot;</span>, <span class="st">&quot;estimated density&quot;</span>), <span class="dt">lty =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;black&quot;</span>))</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>We next apply Generalized Jackknifing method to boundary correction problem.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Generlized Jacknifing method</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>kernel.new &lt;-<span class="st"> </span><span class="cf">function</span>(x, u, h) {</span>
+<span id="cb5-3"><a href="#cb5-3"></a>  <span class="co"># Compute a0, a1, a2</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>  lb &lt;-<span class="st"> </span><span class="dv">-1</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a>  ub &lt;-<span class="st"> </span><span class="kw">pmin</span>(u <span class="op">/</span><span class="st"> </span>h, <span class="dv">1</span>)</span>
+<span id="cb5-6"><a href="#cb5-6"></a>  a0 &lt;-<span class="st"> </span><span class="fl">0.75</span> <span class="op">*</span><span class="st"> </span>(ub <span class="op">-</span><span class="st"> </span>lb) <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span> <span class="op">*</span><span class="st"> </span>(ub<span class="op">^</span><span class="dv">3</span> <span class="op">-</span><span class="st"> </span>lb<span class="op">^</span><span class="dv">3</span>)</span>
+<span id="cb5-7"><a href="#cb5-7"></a>  a1 &lt;-<span class="st"> </span><span class="dv">3</span> <span class="op">/</span><span class="st"> </span><span class="dv">8</span> <span class="op">*</span><span class="st"> </span>(ub<span class="op">^</span><span class="dv">2</span> <span class="op">-</span><span class="st"> </span>lb<span class="op">^</span><span class="dv">2</span>) <span class="op">-</span><span class="st"> </span><span class="dv">3</span> <span class="op">/</span><span class="st"> </span><span class="dv">16</span> <span class="op">*</span><span class="st"> </span>(ub<span class="op">^</span><span class="dv">4</span> <span class="op">-</span><span class="st"> </span>lb<span class="op">^</span><span class="dv">4</span>)</span>
+<span id="cb5-8"><a href="#cb5-8"></a>  a2 &lt;-<span class="st"> </span><span class="fl">0.25</span> <span class="op">*</span><span class="st"> </span>(ub<span class="op">^</span><span class="dv">3</span> <span class="op">-</span><span class="st"> </span>lb<span class="op">^</span><span class="dv">3</span>) <span class="op">-</span><span class="st"> </span><span class="fl">0.15</span> <span class="op">*</span><span class="st"> </span>(ub<span class="op">^</span><span class="dv">5</span> <span class="op">-</span><span class="st"> </span>lb<span class="op">^</span><span class="dv">5</span>)</span>
+<span id="cb5-9"><a href="#cb5-9"></a>  ((<span class="dv">3</span><span class="op">/</span><span class="dv">4</span>)<span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>x<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>(<span class="kw">abs</span>(x) <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1</span>)) <span class="op">*</span><span class="st"> </span>(a2 <span class="op">-</span><span class="st"> </span>a1<span class="op">*</span>x) <span class="op">/</span><span class="st"> </span>(a0<span class="op">*</span>a2 <span class="op">-</span><span class="st"> </span>a1<span class="op">^</span><span class="dv">2</span>)</span>
+<span id="cb5-10"><a href="#cb5-10"></a>}</span>
+<span id="cb5-11"><a href="#cb5-11"></a>den.est &lt;-<span class="st"> </span><span class="cf">function</span>(u, ui, h) {</span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="kw">sapply</span>(u, <span class="cf">function</span>(u) <span class="kw">ifelse</span>(u <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">0</span>, <span class="kw">mean</span>(<span class="kw">kernel.new</span>((u <span class="op">-</span><span class="st"> </span>ui) <span class="op">/</span><span class="st"> </span>h, u, h)) <span class="op">/</span><span class="st"> </span>h))</span>
+<span id="cb5-13"><a href="#cb5-13"></a>}</span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="co"># Estimated value at boundary 0</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a>x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">8</span>, <span class="dt">by =</span> <span class="fl">0.02</span>)</span>
+<span id="cb5-16"><a href="#cb5-16"></a>y &lt;-<span class="st"> </span><span class="kw">den.est</span>(x, dat, <span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">bw.bcv</span>(dat))</span>
+<span id="cb5-17"><a href="#cb5-17"></a>y0 &lt;-<span class="st"> </span><span class="kw">den.est</span>(<span class="dv">0</span>, dat, <span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">bw.bcv</span>(dat))</span>
+<span id="cb5-18"><a href="#cb5-18"></a>y0_True &lt;-<span class="st"> </span><span class="kw">dexp</span>(<span class="dv">0</span>,<span class="dv">1</span>)</span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="kw">cat</span>(<span class="st">&quot;The estimated value at boundary 0 by using GJack is &quot;</span>, y0, <span class="st">&quot;</span><span class="ch">\n</span><span class="st">The true value at boundary 0 is &quot;</span>, y0_True)</span></code></pre></div>
+<pre><code>## The estimated value at boundary 0 by using GJack is  1.060637 
+## The true value at boundary 0 is  1</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Plot</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="kw">plot</span>(x, y, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">1.2</span>), <span class="dt">ylab =</span> <span class="st">&quot;Density&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="kw">lines</span>(x, <span class="kw">dexp</span>(x, <span class="dv">1</span>), <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="kw">abline</span>(<span class="dt">v =</span> <span class="dv">0</span>, <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="kw">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;true density&quot;</span>, <span class="st">&quot;estimated density&quot;</span>), <span class="dt">lty =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;black&quot;</span>))</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
